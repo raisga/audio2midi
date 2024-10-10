@@ -18,7 +18,23 @@ complete_path="${output_dir}/${audio_file_name}"
 # https://medium.com/@wujido20/handling-flags-in-bash-scripts-4b06b4d0ed04
 
 # 0. Handle flags, replace variables values if needed
-#  (TODO: change from arguments flags, { --selected_opt, --total_opts, --model_name, --output_dir })
+# (TODO: change from arguments flags, { --selected_opt, --total_opts, --model_name, --output_dir })
+
+while getopts "hvf:" flag; do
+  case $flag in
+    h) sh ./scripts/help.sh
+       exit
+       ;;
+    # v) sh ./scripts/version.sh
+    #    exit
+    #    ;;
+    # f) selected_opt=$OPTARG
+    #    ;;
+    \?) echo "Invalid option -$OPTARG" >&2
+       exit
+       ;;
+  esac
+done
 
 # ...................................................................................................................
 
