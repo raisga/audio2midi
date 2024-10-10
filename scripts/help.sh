@@ -1,3 +1,5 @@
+#!/bin/sh
+
 help_msg="
 Usage: sh script.sh [OPTIONS]
 Options:

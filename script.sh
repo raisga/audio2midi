@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # ~~ Pipeline Idea ~~
 # TODO: Support WAV files!
 # TODO: Recreate script as a docker container
@@ -22,12 +24,8 @@ complete_path="${output_dir}/${audio_file_name}"
 
 while getopts "hvf:" flag; do
   case $flag in
-    h) sh ./scripts/help.sh
-       exit
-       ;;
-    # v) sh ./scripts/version.sh
-    #    exit
-    #    ;;
+    h) sh ./scripts/help.sh; exit 0;;
+    v) sh ./scripts/version.sh; exit 0;;
     # f) selected_opt=$OPTARG
     #    ;;
     \?) echo "Invalid option -$OPTARG" >&2
