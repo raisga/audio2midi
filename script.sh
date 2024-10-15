@@ -1,34 +1,77 @@
-#!/bin/sh
+#!/bin/bash
 
 # ~~ Pipeline Idea ~~
 # TODO: Support WAV files!
-# TODO: Recreate script as a docker container
+# TODO: Recreate script maybe as a docker container, python script?
 
-# Variables and Constants
+# Functions
+. ./scripts/dependencies.sh
+. ./scripts/usage.sh
+. ./scripts/utils.sh
+. ./scripts/ops.sh
+
+# Default variables values and constants
+verbose_mode=true
+input_file=''
 selected_opt=''
 total_opts=4
 output_dir='separated'
 model_name='htdemucs_ft'
-audio_file_path="./gen/music_fx_an_ambiental_melodic_deathcore_song_with_odd.mp3"
-audio_file_name=$(basename ${audio_file_path} | cut -f 1 -d '.')
-complete_path="${output_dir}/${audio_file_name}"
 
-# https://medium.com/@wujido20/handling-flags-in-bash-scripts-4b06b4d0ed04
+# Function to handle options and arguments
+# Handle script options and arguments
+# 
+# The function processes the command line options and arguments and
+# updates the relevant variables accordingly.
+# 
+# Parameters:
+#   $@ - Command line options and arguments
+# 
+# Options:
+#   -h, --help      Display script usage and exit
+#   -q, --quiet     Disable verbose mode, only errors will be displayed in the script
+#   -f, --file      Specify an input audio file to process
 
-# 0. Handle flags, replace variables values if needed
-# (TODO: change from arguments flags, { --selected_opt, --total_opts, --model_name, --output_dir })
+handle_options() {
+  while [ $# -gt 0 ]; do
+    case $1 in
+      -h | --help)
+        usage
+        exit 0
+        ;;
+      -q | --quiet)
+        verbose_mode=false
+        ;;
+      -f | --file*)
+        if ! has_argument $@; then
+          echo "File not specified." >&2
+          usage
+          exit 1
+        fi
+        input_file=$(extract_argument $@)
+        shift
+        ;;
+      *)
+        echo "Invalid option: $1" >&2
+        usage
+        exit 1
+        ;;
+    esac
+    shift
+  done
+}
 
-while getopts "hvf:" flag; do
-  case $flag in
-    \?) echo "Invalid option -$OPTARG" >&2; exit 1;;
-    h) sh ./scripts/help.sh; exit 0;;
-    v) sh ./scripts/version.sh; exit 0;;
-    f) echo "Selected option: $OPTARG";;
-  esac
-done
+# Main script execution
+handle_options "$@"
 
-sh ./scripts/dependencies.sh
+if [ -n "$input_file" ]; then
+  echo "Output file specified: $input_file"
+  audio_file_name=$(basename ${input_file} | cut -f 1 -d '.')
+  complete_path="${output_dir}/${audio_file_name}"
 
-echo ">> Split audio file operations... 🚀"
-sh ./scripts/op1.sh
-sh ./scripts/op2.sh
+  dependencies $verbose_mode
+
+  echo ">> Split audio file operations... 🚀"
+  op1 $verbose_mode
+  op2 $verbose_mode
+fi
