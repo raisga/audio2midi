@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Check if an option has an argument
 #
 # Parameters:

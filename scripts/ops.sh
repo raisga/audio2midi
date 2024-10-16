@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Perform the first operation: split all instruments from the audio file at once
 #
@@ -8,6 +8,12 @@
 # 4. Remove the temporary directory
 op1() {
     verbose_mode=$1
+    model_name=$2
+    complete_path=$3
+    audio_file_path=$4
+    audio_file_name=$5
+    output_dir=$6
+
     if [ "$verbose_mode" = true ]; then
         echo "> op1 => first operation (done at once, split all instruments from the audio file)"
     fi
@@ -25,6 +31,12 @@ op1() {
 # 4. Remove the temporary directory
 op2() {
     verbose_mode=$1
+    model_name=$2
+    complete_path=$3
+    audio_file_path=$4
+    audio_file_name=$5
+    output_dir=$6
+    
     if [ "$verbose_mode" = true ]; then
         echo "> op2 => second operations (one by one, split instruments from the audio file)"
     fi

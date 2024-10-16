@@ -12,9 +12,9 @@
 
 # Default variables values and constants
 verbose_mode=true
+compress_mode=false
 input_file=''
-selected_opt=''
-total_opts=4
+selected_op=''
 output_dir='separated'
 model_name='htdemucs_ft'
 
@@ -33,8 +33,17 @@ model_name='htdemucs_ft'
 #   -f, --file      Specify an input audio file to process
 
 handle_options() {
+  local option
+  local argument
+  local index
+
+  index=0
   while [ $# -gt 0 ]; do
-    case $1 in
+    option="$1"
+    argument="$2"
+
+    # TODO: Implement compress_mode flag
+    case $option in
       -h | --help)
         usage
         exit 0
@@ -42,22 +51,54 @@ handle_options() {
       -q | --quiet)
         verbose_mode=false
         ;;
-      -f | --file*)
-        if ! has_argument $@; then
-          echo "File not specified." >&2
+      -f | --file)
+        if [ -z "$argument" ]; then
+          echo "ERROR: File not specified" >&2
           usage
           exit 1
         fi
-        input_file=$(extract_argument $@)
+        input_file="$argument"
+        shift
+        ;;
+      -i | --install)
+        dependencies "$verbose_mode"
+        exit 0
+        ;;
+      -o | --output)
+        if [ -z "$argument" ]; then
+          echo "ERROR: Output directory not specified" >&2
+          usage
+          exit 1
+        fi
+        output_dir="$argument"
+        shift
+        ;;
+      -m | --model)
+        if [ -z "$argument" ]; then
+          echo "ERROR: Model name not specified" >&2
+          usage
+          exit 1
+        fi
+        model_name="$argument"
+        shift
+        ;;
+      -s | --select)
+        if [ -z "$argument" ]; then
+          echo "ERROR: Operation not specified" >&2
+          usage
+          exit 1
+        fi
+        selected_op="$argument"
         shift
         ;;
       *)
-        echo "Invalid option: $1" >&2
+        echo "ERROR: Invalid option: $option" >&2
         usage
         exit 1
         ;;
     esac
     shift
+    index=$((index + 1))
   done
 }
 
@@ -65,13 +106,17 @@ handle_options() {
 handle_options "$@"
 
 if [ -n "$input_file" ]; then
-  echo "Output file specified: $input_file"
   audio_file_name=$(basename ${input_file} | cut -f 1 -d '.')
   complete_path="${output_dir}/${audio_file_name}"
 
-  dependencies $verbose_mode
+  if [ "$verbose_mode" = true ]; then
+    echo "- Input file: $input_file"
+    echo "- Output directory: $output_dir"  
+    echo "- Model name: $model_name"
+    echo "- Selected operation: $selected_op"
+    echo ">> Starting split audio file operations... 🚀"
+  fi
 
-  echo ">> Split audio file operations... 🚀"
-  op1 $verbose_mode
-  op2 $verbose_mode
+  op1 "$verbose_mode" "$model_name" "$complete_path" "$input_file" "$audio_file_name" "$output_dir"
+  op2 "$verbose_mode" "$model_name" "$complete_path" "$input_file" "$audio_file_name" "$output_dir"
 fi
