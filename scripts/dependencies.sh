@@ -14,7 +14,7 @@ dependencies() {
     brew list portaudio > /dev/null || brew install portaudio
     brew list pipx > /dev/null || brew install pipx
     pipx install demucs > /dev/null # TODO: check if demucs is installed beforehand 
-    # ^
-    # NOTE: Alternatively we can use the API (if performance and price are worth it): https://splitter.ai/api 
+    # ^ NOTE: Alternatively we can use the API (if performance and price are worth it): https://splitter.ai/api 
+    pipx install basic-pitch > /dev/null # TODO: check if demucs is installed beforehand 
 }
 
