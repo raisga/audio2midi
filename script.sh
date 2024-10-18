@@ -124,4 +124,5 @@ if [ -n "$input_file" ]; then
 
   _op1 "$verbose_mode" "$model_name" "$complete_path" "$input_file" "$audio_file_name" "$output_dir"
   _op2 "$verbose_mode" "$model_name" "$complete_path" "$input_file" "$audio_file_name" "$output_dir"
+  _convertMp3toMidi "$verbose_mode" "$complete_path" "$output_dir"
 fi
