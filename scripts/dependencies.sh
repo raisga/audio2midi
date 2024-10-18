@@ -5,7 +5,7 @@
 #    - portaudio
 #    - pipx
 #    - demucs (via pipx)
-dependencies() {
+_dependencies() {
     verbose_mode=$1
     if [ "$verbose_mode" = true ]; then
         echo ">> Installing dependencies if needed... ⏳"

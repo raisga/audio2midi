@@ -4,11 +4,16 @@
 # TODO: Support WAV files!
 # TODO: Recreate script maybe as a docker container, python script?
 
+# Constants
+RETURN_CODE_SUCCESS=0
+RETURN_CODE_ERROR=1
+
 # Functions
 . ./scripts/dependencies.sh
 . ./scripts/usage.sh
 . ./scripts/utils.sh
 . ./scripts/ops.sh
+. ./scripts/convert.sh
 
 # Default variables values and constants
 verbose_mode=true
@@ -45,7 +50,7 @@ handle_options() {
     # TODO: Implement compress_mode flag
     case $option in
       -h | --help)
-        usage
+        _usage
         exit 0
         ;;
       -q | --quiet)
@@ -54,21 +59,21 @@ handle_options() {
       -f | --file)
         if [ -z "$argument" ]; then
           echo "ERROR: File not specified" >&2
-          usage
-          exit 1
+          _usage
+          exit "$RETURN_CODE_ERROR"
         fi
         input_file="$argument"
         shift
         ;;
       -i | --install)
-        dependencies "$verbose_mode"
+        _dependencies "$verbose_mode"
         exit 0
         ;;
       -o | --output)
         if [ -z "$argument" ]; then
           echo "ERROR: Output directory not specified" >&2
-          usage
-          exit 1
+          _usage
+          exit "$RETURN_CODE_SUCCESS"
         fi
         output_dir="$argument"
         shift
@@ -76,8 +81,8 @@ handle_options() {
       -m | --model)
         if [ -z "$argument" ]; then
           echo "ERROR: Model name not specified" >&2
-          usage
-          exit 1
+          _usage
+          exit "$RETURN_CODE_ERROR"
         fi
         model_name="$argument"
         shift
@@ -85,16 +90,16 @@ handle_options() {
       -s | --select)
         if [ -z "$argument" ]; then
           echo "ERROR: Operation not specified" >&2
-          usage
-          exit 1
+          _usage
+          exit "$RETURN_CODE_ERROR"
         fi
         selected_op="$argument"
         shift
         ;;
       *)
         echo "ERROR: Invalid option: $option" >&2
-        usage
-        exit 1
+        _usage
+        exit "$RETURN_CODE_ERROR"
         ;;
     esac
     shift
@@ -103,7 +108,7 @@ handle_options() {
 }
 
 # Main script execution
-handle_options "$@"
+_handle_options "$@"
 
 if [ -n "$input_file" ]; then
   audio_file_name=$(basename ${input_file} | cut -f 1 -d '.')
@@ -117,6 +122,6 @@ if [ -n "$input_file" ]; then
     echo ">> Starting split audio file operations... 🚀"
   fi
 
-  op1 "$verbose_mode" "$model_name" "$complete_path" "$input_file" "$audio_file_name" "$output_dir"
-  op2 "$verbose_mode" "$model_name" "$complete_path" "$input_file" "$audio_file_name" "$output_dir"
+  _op1 "$verbose_mode" "$model_name" "$complete_path" "$input_file" "$audio_file_name" "$output_dir"
+  _op2 "$verbose_mode" "$model_name" "$complete_path" "$input_file" "$audio_file_name" "$output_dir"
 fi

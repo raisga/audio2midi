@@ -9,7 +9,7 @@
 #
 # Returns:
 #   boolean: true if the option has an argument, false otherwise
-has_argument() {
+_has_argument() {
     [[ ("$1" == *=* && -n ${1#*=}) || ( ! -z "$2" && "$2" != -*)  ]];
 }
 
@@ -27,6 +27,6 @@ has_argument() {
 #
 # Returns:
 #   string: The extracted argument or default value
-extract_argument() {
-  echo "${2:-${1#*=}}"
+_extract_argument() {
+    echo "${2:-${1#*=}}"
 }
