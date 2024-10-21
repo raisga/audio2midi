@@ -14,14 +14,7 @@ RETURN_CODE_ERROR=1
 . ./scripts/utils.sh
 . ./scripts/ops.sh
 . ./scripts/convert.sh
-
-# Default variables values and constants
-verbose_mode=true
-compress_mode=false
-input_file=''
-selected_op=''
-output_dir='separated'
-model_name='htdemucs_ft'
+. ./scripts/constants.sh
 
 # Function to handle options and arguments
 # Handle script options and arguments
@@ -95,6 +88,7 @@ _handle_options() {
         selected_op="$argument"
         shift
         ;;
+      # TODO: Implement -d | --daw for export with reaper, and other softwares 
       *)
         echo "ERROR: Invalid option: $option" >&2
         _usage
