@@ -6,7 +6,7 @@
 # 2. Split the instruments using `demucs`
 # 3. Move the generated files to the output directory
 # 4. Remove the temporary directory
-op1() {
+_op1() {
     verbose_mode=$1
     model_name=$2
     complete_path=$3
@@ -29,7 +29,7 @@ op1() {
 # 2. Split the instruments using `demucs` one by one
 # 3. Move the generated files to the output directory
 # 4. Remove the temporary directory
-op2() {
+_op2() {
     verbose_mode=$1
     model_name=$2
     complete_path=$3

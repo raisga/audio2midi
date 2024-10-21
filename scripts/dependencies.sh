@@ -15,7 +15,6 @@ _dependencies() {
     brew list pipx > /dev/null || brew install pipx
     pipx install demucs > /dev/null # TODO: check if demucs is installed beforehand 
     # ^ NOTE: Alternatively we can use the API (if performance and price are worth it): https://splitter.ai/api 
-    pipx install basic-pitch > /dev/null # TODO: check if basic-pitch is installed beforehand 
-    pipx install tensorflow > /dev/null # TODO: check if tensorflow is installed beforehand 
+    pipx install 'basic-pitch[tf]' --force
 }
 

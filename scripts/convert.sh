@@ -8,5 +8,5 @@ _convertMp3toMidi() {
         echo ">> Converting MP3 to MIDI... ⏳"
     fi
     mkdir -p ./${output_dir}/midi
-    basic-pitch "$output_dir" "$input_dir/op1/bass.mp3"
+    pipx run basic-pitch "$output_dir" "$input_dir/op1/bass.mp3"
 }

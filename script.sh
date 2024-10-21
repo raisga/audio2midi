@@ -37,7 +37,7 @@ model_name='htdemucs_ft'
 #   -q, --quiet     Disable verbose mode, only errors will be displayed in the script
 #   -f, --file      Specify an input audio file to process
 
-handle_options() {
+_handle_options() {
   local option
   local argument
   local index
@@ -67,7 +67,6 @@ handle_options() {
         ;;
       -i | --install)
         _dependencies "$verbose_mode"
-        exit 0
         ;;
       -o | --output)
         if [ -z "$argument" ]; then
