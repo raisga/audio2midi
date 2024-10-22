@@ -4,11 +4,13 @@
 RETURN_CODE_SUCCESS=0
 RETURN_CODE_ERROR=1
 
-# Default variables values and constants
+# Default variables values
 verbose_mode=true
 compress_mode=false
 input_file=''
-selected_op=''
+selected_ops=("op1" "op2")
+op1_dir='op1'
+op2_dir='op2'
 output_dir='separated'
 model_name='htdemucs_ft'
-instruments=("bass" "vocals" "guitars" "drums" "other")
+instruments=("bass" "drums" "other" "vocals")
