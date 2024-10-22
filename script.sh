@@ -4,17 +4,13 @@
 # TODO: Support WAV files!
 # TODO: Recreate script maybe as a docker container, python script?
 
-# Constants
-RETURN_CODE_SUCCESS=0
-RETURN_CODE_ERROR=1
-
 # Functions
+. ./scripts/constants.sh
 . ./scripts/dependencies.sh
 . ./scripts/usage.sh
 . ./scripts/utils.sh
 . ./scripts/ops.sh
 . ./scripts/convert.sh
-. ./scripts/constants.sh
 
 # Function to handle options and arguments
 # Handle script options and arguments
@@ -29,6 +25,16 @@ RETURN_CODE_ERROR=1
 #   -h, --help      Display script usage and exit
 #   -q, --quiet     Disable verbose mode, only errors will be displayed in the script
 #   -f, --file      Specify an input audio file to process
+#   -i, --install   Install dependencies
+#   -o, --output    Specify an output directory
+#   -m, --model     Specify a model name
+#   -s, --select    Select an operation
+
+# TODO: Add more options
+#   -c, --compress  Compress the output file
+#   -d, --daw       Play the output file
+#   -t, --tracks    Select extract tracks from the output file
+#   -x, --fx        Add effects to the output file
 
 _handle_options() {
   local option
@@ -117,5 +123,5 @@ if [ -n "$input_file" ]; then
 
   _op1 "$verbose_mode" "$model_name" "$complete_path" "$input_file" "$audio_file_name" "$output_dir"
   _op2 "$verbose_mode" "$model_name" "$complete_path" "$input_file" "$audio_file_name" "$output_dir"
-  _convertMp3toMidi "$verbose_mode" "$complete_path" "$output_dir"
+  _convertMp3toMidi "$verbose_mode" "$complete_path" "$output_dir" "$instruments"
 fi
