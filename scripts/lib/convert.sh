@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. ./scripts/constants.sh
+
 # Convert MP3 audio files to MIDI files
 #
 # Parameters:
@@ -15,15 +17,19 @@
 #
 _convertMp3toMidi() {
     local verbose_mode=$1
-    local input_dir=$2
-    local output_dir=$3
-    local $instruments=$4
+    local complete_path=$2
+    local selected_op=$4
+    # local instruments=$5
+    local name_suffix
 
+    name_suffix="basic_pitch"
     if [ "$verbose_mode" = true ]; then
         echo ">> Converting MP3 to MIDI... ⏳"
     fi
-    mkdir -p ./${output_dir}/midi
-    for instrument in "${instruments[@]}"; do
-        basic-pitch "$output_dir/midi" "$input_dir/op1/$instrument.mp3"
+    mkdir -p ./${complete_path}/${selected_op}/midi
+    for instrument in "${INSTRUMENTS_TRACKS[@]}"; do
+        basic-pitch ./${complete_path}/${selected_op}/midi ./${complete_path}/${selected_op}/${instrument}.mp3
+        mv ./${complete_path}/${selected_op}/midi/${instrument}_${name_suffix}.mid ./${complete_path}/${selected_op}/${instrument}.mid
     done
+    rm -rf ./${complete_path}/${selected_op}/midi
 }

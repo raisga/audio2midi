@@ -1,20 +1,13 @@
 #!/bin/bash
 
-# ~~ Pipeline Idea ~~
-# TODO: Support WAV files!
-# TODO: Recreate script maybe as a docker container, python script?
+# Imports
+. ./scripts/lib/dependencies.sh
+. ./scripts/lib/ops.sh
+. ./scripts/lib/convert.sh
+. ./scripts/utils/helpers.sh
+. ./scripts/utils/flags.sh
 
-# Functions
-. ./scripts/variables.sh
-. ./scripts/utils.sh
-. ./scripts/dependencies.sh
-. ./scripts/ops.sh
-. ./scripts/convert.sh
-
-# Function to handle options and arguments
-# Handle script options and arguments
-#
-# The function processes the command line options and arguments and
+#The function processes the command line options and arguments and
 # updates the relevant variables accordingly.
 #
 # Parameters:
@@ -29,20 +22,13 @@ _handle_options() {
         option="$1"
         argument="$2"
 
-        # TODO: Add more options
-        #   -c, --compress                                  Compress the output file
-        #   -t, --tracks {bass,guitar,drums,vocals,other}   Select extract tracks from the output file
-        #   -l, --log                                       Save a log file in the output directory
-        # ...
-        #   -d, --daw                                       Creates a digital audio workstation (DAW) file {reaper, audacity}
-        #   -x, --fx                                        Add effects to the output file < with PedalBoard
         case $option in
         -h | --help)
             _print_usage
             exit "$RETURN_CODE_SUCCESS"
             ;;
-        -q | --quiet)
-            verbose_mode=false
+        -v | --verbose)
+            verbose_mode=true
             ;;
         -i | --install)
             _install_dependencies "$verbose_mode"
@@ -97,9 +83,11 @@ _handle_options() {
 _main() {
     _handle_options "$@"
     if [ -n "$input_file" ]; then
-        local audio_file_name=$(basename ${input_file} | cut -f 1 -d '.')
-        local complete_path="${output_dir}/${audio_file_name}"
+        local audio_file_name
+        local complete_path
 
+        audio_file_name=$(basename ${input_file} | cut -f 1 -d '.')
+        complete_path="$output_dir/$audio_file_name"
         if [ "$verbose_mode" = true ]; then
             echo "- Input file: $input_file"
             echo "- Output directory: $output_dir"
@@ -107,13 +95,16 @@ _main() {
             echo "- Selected operation: $selected_op"
             echo ">> Starting split audio file operations... 🚀"
         fi
-        _op1 "$verbose_mode" "$model_name" "$complete_path" "$input_file" "$audio_file_name" "$output_dir" "$op1_dir"
-        _op2 "$verbose_mode" "$model_name" "$complete_path" "$input_file" "$audio_file_name" "$output_dir" "$op2_dir" "$instruments"
-        _convertMp3toMidi "$verbose_mode" "$complete_path" "$output_dir" "$instruments"
+        if [ "$selected_op" = "$OP_MINI" ]; then
+            _op_mini "$verbose_mode" "$model_name" "$complete_path" "$input_file" "$audio_file_name" "$output_dir"
+        elif [ "$selected_op" = "$OP_FULL" ]; then
+            _op_full "$verbose_mode" "$model_name" "$complete_path" "$input_file" "$audio_file_name" "$output_dir" "$instruments"
+        elif [ "$selected_op" = "$OP_EXTRA" ]; then
+            _op_extra "$verbose_mode" "$model_name" "$complete_path" "$input_file" "$audio_file_name" "$output_dir" "$instruments"
+        fi
+        _convertMp3toMidi "$verbose_mode" "$complete_path" "$output_dir" "$selected_op" "$instruments"
     else
         _print_usage
-        exit "$RETURN_CODE_ERROR"
+        exit "$RETURN_CODE_SUCCESS"
     fi
 }
-
-_main "$@"

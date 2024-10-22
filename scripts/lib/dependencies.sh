@@ -41,6 +41,7 @@ _install_dependencies() {
     local verbose_mode=$1
 
     pc_arch=$(uname -m)
+    # TODO: Check if also is Mac... This may install with Linux using arm64 architecture too!
     if [ "$pc_arch" = "arm64" ]; then
         _mac_arm64_dependencies "$verbose_mode"
     fi

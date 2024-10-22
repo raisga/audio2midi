@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. ./scripts/constants.sh
+
 # Check if an option has an argument
 #
 # Parameters:
@@ -38,13 +40,13 @@ _extract_argument() {
 _print_usage() {
     echo "Usage: $0 -f {FILE} [OPTIONS]"
     echo "Options:"
-    echo " -h, --help                    Display script usage and exit"
-    echo " -q, --quiet                   Disable verbose mode, only errors will be displayed"
-    echo " -f, --file {FILE}             Specify an input audio file to process"
-    echo " -i, --install                 Install dependencies, includes: {mac_arm64}"
-    echo " -o, --outdir {DIR}            Specify an output directory (default: ./separated)"
-    echo " -m, --model {htdemucs_ft}     Specify a model name (default: htdemucs_ft)"
-    echo " -s, --select {op1, op2}       Select an operation to perform (default: op1 and opt2)"
+    echo " -h, --help                                   Display script usage and exit"
+    echo " -v, --verbose                                Enables verbose mode, errors will be displayed too"
+    echo " -f, --file {FILE}                            Specify an input audio file to process"
+    echo " -i, --install                                Install dependencies, includes: {mac_arm64}"
+    echo " -o, --outdir {DIR}                           Specify an output directory (default: ./separated)"
+    echo " -m, --model {htdemucs_ft}                    Specify a model name (default: htdemucs_ft)"
+    echo " -s, --select {op_mini | op_full | op_extra}  Select an operation to perform (default: op_mini)"
 }
 
 # Check if an argument is given and exit if not
