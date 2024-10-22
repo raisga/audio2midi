@@ -36,15 +36,15 @@ _op2() {
     audio_file_path=$4
     audio_file_name=$5
     output_dir=$6
+    instruments=$7
     
     if [ "$verbose_mode" = true ]; then
         echo "> op2 => second operations (one by one, split instruments from the audio file)"
     fi
     mkdir -p ./${complete_path}/op2
-    demucs --name ${model_name} --mp3 ${audio_file_path} --out ${output_dir} --two-stems=bass
-    demucs --name ${model_name} --mp3 ${audio_file_path} --out ${output_dir} --two-stems=drums
-    demucs --name ${model_name} --mp3 ${audio_file_path} --out ${output_dir} --two-stems=other
-    demucs --name ${model_name} --mp3 ${audio_file_path} --out ${output_dir} --two-stems=vocals
+    for instrument in "${instruments[@]}"; do
+        demucs --name ${model_name} --mp3 ${audio_file_path} --out ${output_dir} --two-stems="$instrument"
+    done
     mv ${output_dir}/${model_name}/${audio_file_name}/* ${complete_path}/op2
     rm -rf ${output_dir}/${model_name}
 }

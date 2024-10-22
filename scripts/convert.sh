@@ -8,14 +8,9 @@ _convertMp3toMidi() {
     if [ "$verbose_mode" = true ]; then
         echo ">> Converting MP3 to MIDI... ⏳"
     fi
-    mkdir -p ./${output_dir}/midi
 
-    # Iterate over the array and create filenames based on its elements
+    mkdir -p ./${output_dir}/midi
     for instrument in "${instruments[@]}"; do
-        # Create a filename based on the instrument name
-        # filename="${instrument}.txt"
-        # echo "Creating $filename"
         basic-pitch "$output_dir/midi" "$input_dir/op1/$instrument.mp3"
     done
-
 }
