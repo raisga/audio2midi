@@ -20,16 +20,23 @@ _convertMp3toMidi() {
     local complete_path=$2
     local selected_op=$4
     # local instruments=$5
-    local name_suffix
+    local basic_pitch_suffix
+    local no_prefix
 
-    name_suffix="basic_pitch"
+    basic_pitch_suffix="_basic_pitch"
+    no_prefix="no_"
     if [ "$verbose_mode" = true ]; then
         echo ">> Converting MP3 to MIDI... ⏳"
     fi
     mkdir -p ./${complete_path}/${selected_op}/midi
     for instrument in "${INSTRUMENTS_TRACKS[@]}"; do
+        # Refactor: This check is for other operations op_full and op_extra, maybe no need to do this here? Or send a flag from argument or something like that
+        if [ "./${complete_path}/${selected_op}/${no_prefix}${instrument}.mp3" ]; then
+            basic-pitch ./${complete_path}/${selected_op}/midi ./${complete_path}/${selected_op}/${no_prefix}${instrument}.mp3
+            mv ./${complete_path}/${selected_op}/midi/${no_prefix}${instrument}${basic_pitch_suffix}.mid ./${complete_path}/${selected_op}/${no_prefix}${instrument}.mid
+        fi
         basic-pitch ./${complete_path}/${selected_op}/midi ./${complete_path}/${selected_op}/${instrument}.mp3
-        mv ./${complete_path}/${selected_op}/midi/${instrument}_${name_suffix}.mid ./${complete_path}/${selected_op}/${instrument}.mid
+        mv ./${complete_path}/${selected_op}/midi/${instrument}${basic_pitch_suffix}.mid ./${complete_path}/${selected_op}/${instrument}.mid
     done
     rm -rf ./${complete_path}/${selected_op}/midi
 }
