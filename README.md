@@ -1,5 +1,7 @@
 # audio2midi
 
+> **NOTE: We have archived this project in favor of the development of our [python version of the app](https://github.com/raisga/audio2midi-python). All implemented features, planned features and bugs, plus all the improvements, are under the works, or has already been implemented ;)**
+
 A bash script to split an audio file into its individual instrument tracks and generate MIDI files from each track. This tool is designed to accelerate productivity by transforming simple audio recordings (demos, quick ideas) into files ready for use in a Digital Audio Workstation (DAW).
 
 ## Table of Contents
